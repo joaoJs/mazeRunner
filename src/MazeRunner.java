@@ -3,8 +3,9 @@ public class MazeRunner {
 
     public static void main(String[] args) {
         Maze myMap = new Maze();
+        int moves = 0;
         intro(myMap);
-        userMove(myMap);
+        userMove(myMap, moves);
     }
 
     public static void intro(Maze myMap) {
@@ -18,7 +19,7 @@ public class MazeRunner {
         System.out.println();
     }
 
-    public static void userMove(Maze myMap) {
+    public static void userMove(Maze myMap, int moves) {
         //Maze myMap = new Maze();
         System.out.print("Where would you like to move? (R, L, U, D) ");
         Scanner directionInput = new Scanner(System.in);
@@ -34,29 +35,36 @@ public class MazeRunner {
         boolean canMove = false;
         if (direction.equals("R")) {
             canMove =  myMap.canIMoveRight();
-            System.out.println("canMove --> " + canMove);
             if (canMove) {
-                System.out.println("Inside ---> " + canMove);
                 myMap.moveRight();
+                moves++;
                 myMap.printMap();
+                System.out.println(moves);
+                movesMessage(moves);
             }
         } else if (direction.equals("L")) {
             canMove = myMap.canIMoveLeft();
             if (canMove) {
                 myMap.moveLeft();
+                moves++;
                 myMap.printMap();
+                movesMessage(moves);
             }
         } else if (direction.equals("U")) {
             canMove = myMap.canIMoveUp();
             if (canMove) {
                 myMap.moveUp();
+                moves++;
                 myMap.printMap();
+                movesMessage(moves);
             }
         } else {
             canMove = myMap.canIMoveDown();
             if (canMove) {
                 myMap.moveDown();
+                moves++;
                 myMap.printMap();
+                movesMessage(moves);
             }
         }
 
@@ -68,9 +76,24 @@ public class MazeRunner {
 
         if (myMap.didIWin()) {
             System.out.println("Congratulations, you made it out alive!");
-        } else {
-            userMove(myMap);
+            System.out.println("And you did it in "+ moves +" moves");
+        } else if (moves == 100) {
+            System.out.println("Sorry, but you didn't escape in time- you lose!");
+        } else  {
+            userMove(myMap, moves);
         }
 
+    }
+
+    public static void movesMessage(int moves) {
+        if (moves == 50) {
+            System.out.println("Warning: You have made 50 moves, you have 50 remaining before the maze exit closes");
+        } else if (moves == 75) {
+            System.out.println("Alert! You have made 75 moves, you only have 25 moves left to escape.");
+        } else if (moves == 90) {
+            System.out.println("DANGER! You have made 90 moves, you only have 10 moves left to escape!!");
+        } else if (moves == 100) {
+            System.out.println("Oh no! You took too long to escape, and now the maze exit is closed FOREVER >:[");
+        }
     }
 }

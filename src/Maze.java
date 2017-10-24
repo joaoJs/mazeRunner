@@ -289,7 +289,7 @@ public class Maze {
         //printMap(solution);
     }
     private void addPits(){
-        solution[1][2] = '*';
+        solution[1][2] = '0';
         solution[3][7] = '0';
         solution[3][12] = '0';
         solution[6][4] = '0';

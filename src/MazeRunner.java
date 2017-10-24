@@ -34,37 +34,53 @@ public class MazeRunner {
 
         boolean canMove = false;
         if (direction.equals("R")) {
-            canMove =  myMap.canIMoveRight();
-            if (canMove) {
-                myMap.moveRight();
-                moves++;
-                myMap.printMap();
-                System.out.println(moves);
-                movesMessage(moves);
+            if (myMap.isThereAPit(direction)) {
+                navigatePit(myMap,direction,moves);
+            } else {
+                canMove = myMap.canIMoveRight();
+                if (canMove) {
+                    myMap.moveRight();
+                    moves++;
+                    myMap.printMap();
+                    System.out.println(moves);
+                    movesMessage(moves);
+                }
             }
         } else if (direction.equals("L")) {
-            canMove = myMap.canIMoveLeft();
-            if (canMove) {
-                myMap.moveLeft();
-                moves++;
-                myMap.printMap();
-                movesMessage(moves);
+            if (myMap.isThereAPit(direction)) {
+                navigatePit(myMap,direction,moves);
+            } else {
+                canMove = myMap.canIMoveLeft();
+                if (canMove) {
+                    myMap.moveLeft();
+                    moves++;
+                    myMap.printMap();
+                    movesMessage(moves);
+                }
             }
         } else if (direction.equals("U")) {
-            canMove = myMap.canIMoveUp();
-            if (canMove) {
-                myMap.moveUp();
-                moves++;
-                myMap.printMap();
-                movesMessage(moves);
+            if (myMap.isThereAPit(direction)) {
+                navigatePit(myMap,direction,moves);
+            } else {
+                canMove = myMap.canIMoveUp();
+                if (canMove) {
+                    myMap.moveUp();
+                    moves++;
+                    myMap.printMap();
+                    movesMessage(moves);
+                }
             }
         } else {
-            canMove = myMap.canIMoveDown();
-            if (canMove) {
-                myMap.moveDown();
-                moves++;
-                myMap.printMap();
-                movesMessage(moves);
+            if (myMap.isThereAPit(direction)) {
+                navigatePit(myMap,direction,moves);
+            } else {
+                canMove = myMap.canIMoveDown();
+                if (canMove) {
+                    myMap.moveDown();
+                    moves++;
+                    myMap.printMap();
+                    movesMessage(moves);
+                }
             }
         }
 
@@ -94,6 +110,29 @@ public class MazeRunner {
             System.out.println("DANGER! You have made 90 moves, you only have 10 moves left to escape!!");
         } else if (moves == 100) {
             System.out.println("Oh no! You took too long to escape, and now the maze exit is closed FOREVER >:[");
+        }
+    }
+
+    public static void navigatePit(Maze myMap, String direction, int moves) {
+        System.out.print("Watch out! There's a pit ahead, jump it? ");
+        Scanner input = new Scanner(System.in);
+        String answer = input.next();
+        if ((int)answer.charAt(0) == 121) {
+            myMap.jumpOverPit(direction);
+            moves++;
+            myMap.printMap();
+            movesMessage(moves);
+            if (myMap.didIWin()) {
+                System.out.println("Congratulations, you made it out alive!");
+                System.out.println("And you did it in "+ moves +" moves");
+            } else if (moves == 100) {
+                System.out.println("Sorry, but you didn't escape in time- you lose!");
+            } else  {
+                userMove(myMap, moves);
+            }
+
+        } else {
+            userMove(myMap,moves);
         }
     }
 }

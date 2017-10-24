@@ -2,12 +2,13 @@ import java.util.Scanner;
 public class MazeRunner {
 
     public static void main(String[] args) {
-        intro();
-        userMove();
+        Maze myMap = new Maze();
+        intro(myMap);
+        userMove(myMap);
     }
 
-    public static void intro() {
-        Maze myMap = new Maze();
+    public static void intro(Maze myMap) {
+        //Maze myMap = new Maze();
         System.out.println("Welcome to Maze Runner!");
         System.out.println("Here is your current position:");
         myMap.printMap();
@@ -17,7 +18,8 @@ public class MazeRunner {
         System.out.println();
     }
 
-    public static void userMove() {
+    public static void userMove(Maze myMap) {
+        //Maze myMap = new Maze();
         System.out.print("Where would you like to move? (R, L, U, D) ");
         Scanner directionInput = new Scanner(System.in);
         String direction = directionInput.next();
@@ -28,7 +30,47 @@ public class MazeRunner {
             direction = directionInput.next();
             direction = direction.toUpperCase();
         }
-        System.out.println("Outside!");
+
+        boolean canMove = false;
+        if (direction.equals("R")) {
+            canMove =  myMap.canIMoveRight();
+            System.out.println("canMove --> " + canMove);
+            if (canMove) {
+                System.out.println("Inside ---> " + canMove);
+                myMap.moveRight();
+                myMap.printMap();
+            }
+        } else if (direction.equals("L")) {
+            canMove = myMap.canIMoveLeft();
+            if (canMove) {
+                myMap.moveLeft();
+                myMap.printMap();
+            }
+        } else if (direction.equals("U")) {
+            canMove = myMap.canIMoveUp();
+            if (canMove) {
+                myMap.moveUp();
+                myMap.printMap();
+            }
+        } else {
+            canMove = myMap.canIMoveDown();
+            if (canMove) {
+                myMap.moveDown();
+                myMap.printMap();
+            }
+        }
+
+        if (!canMove) {
+            System.out.println("Sorry, you’ve hit a wall.");
+            myMap.printMap();
+            System.out.print("Pic a new direction. ");
+        }
+
+        if (myMap.didIWin()) {
+            System.out.println("Congratulations, you made it out alive!");
+        } else {
+            userMove(myMap);
+        }
 
     }
 }
